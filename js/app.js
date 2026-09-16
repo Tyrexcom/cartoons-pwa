@@ -350,13 +350,17 @@
 
   /* === Service worker === */
   function registerSW() {
-    if ('serviceWorker' in navigator) {
-      var proto = location.protocol;
-      if (proto === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-        navigator.serviceWorker.register('./service-worker.js').catch(function () {
-          /* SW registration failed — app still works online */
-        });
+    try {
+      if ('serviceWorker' in navigator) {
+        var proto = location.protocol;
+        if (proto === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+          navigator.serviceWorker.register('./service-worker.js').catch(function () {
+            /* SW registration failed — app still works online */
+          });
+        }
       }
+    } catch (e) {
+      /* navigator.serviceWorker may be inaccessible in sandboxed contexts */
     }
   }
 
